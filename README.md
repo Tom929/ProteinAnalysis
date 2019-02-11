@@ -10,8 +10,5 @@ Current features:
 - Predict the charge of multiple polypeptides at different pH (*NEW*)
 - Predict the mass in kDA of multiple polypeptides (*NEW*)
 
-Current bugs:
-- chargeplot and massplot will not always draw upon input of all proteins and require an extra 'enter' keypress
-
 Sources:
 "Properties of Amino Acids," in CRC Handbook of Chemistry and Physics, 99th Edition (Internet Version 2018), John R. Rumble, ed., CRC Press/Taylor & Francis, Boca Raton, FL.
