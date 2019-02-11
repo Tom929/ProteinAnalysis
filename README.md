@@ -3,8 +3,7 @@ Python 3.7
 
 Program by: Tom Resink (Biochemistry student, Imperial College London)
 
-Simple program that can be utilized to predict the proteins of a protein
-from its primary sequence.
+Simple program that can be utilized to predict the proteins of a protein from its primary sequence.
 
 Current features:
 - Convert three letter code to one letter code
