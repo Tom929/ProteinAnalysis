@@ -62,25 +62,21 @@ class protein:
         
 
 #functions (mainly for interfacing)
-    #determines how many sequences need to be analyzes
+    #determines how many sequences need to be analyzed
 def inputnumber(): 
     global sequences
-    number = int(input('How many sequences would you like to input? \n >>>'))
+    number = int(input('How many sequences would you like to input?\n>>>'))
     sequences = list()
-    for i in range()
+    for i in range(0,number):
+        sequences.append(protein(input('name of protein ' + str(i+1) + ':'),input('sequence of protein ' + str(i+1) + ':')))
+        sequences[i].chargeplot()
 
 #interface
 plt.figure(1)
 
 print(x)
 
-test1 = protein(input('name of first protein:'),input('first test sequence:'))
-test2 = protein(input('name of second protein:'), input('second test sequence:'))
-test3 = protein(input('name of third protein:'), input('third test sequence:'))
-
-test1.chargeplot()
-test2.chargeplot()
-test3.chargeplot()
+inputnumber()
 
 #plt.plot(x,test2.chargeplot(),'b-', label=input('second inputted protein:'))
 plt.xlabel('pH')
