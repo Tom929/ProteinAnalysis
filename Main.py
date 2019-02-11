@@ -64,7 +64,10 @@ class protein:
 #functions (mainly for interfacing)
     #determines how many sequences need to be analyzes
 def inputnumber(): 
+    global sequences
     number = int(input('How many sequences would you like to input? \n >>>'))
+    sequences = list()
+    for i in range()
 
 #interface
 plt.figure(1)
