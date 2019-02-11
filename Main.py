@@ -55,33 +55,51 @@ class protein:
         temp = temp + 1/(1+10**(x-ref.pkb[self.sequence[0]])) #taking into account the dissociation of the -NH3 group
         temp = temp - (1*10**(x-ref.pka[self.sequence[-1]]))/(1+10**(x-ref.pka[self.sequence[-1]])) #taking into account the dissociation of the -COOH group
         
-        y = temp #assign temporary value to a permanent one
-        print(y)
-        return plt.plot(x,y, label=self.name) #returns y values to be plotted
-
-        
+        self.charge = temp #assign new attribute for charge at different pH
+        return plt.plot(x,self.charge, label=self.name) #returns plot of charge
+    
+        #calculates masses of proteins in kDa 
+    def massplot(self):
+        temp = 0
+        for i in range(int(len(self.sequence))): #add up the masses in Da
+            temp = temp + ref.mass[self.sequence[i]]
+        self.mass = int(temp)/1000 #conversion to kDA
+        return plt.bar(self.name,self.mass,label=str(self.mass) + ' kDA') #returns plot of kDA
 
 #functions (mainly for interfacing)
     #determines how many sequences need to be analyzed
 def inputnumber(): 
     global sequences
     number = int(input('How many sequences would you like to input?\n>>>'))
-    sequences = list()
+    sequences = list() #empty list to be filled instances of protein class (sequences to be analyzed)
     for i in range(0,number):
-        sequences.append(protein(input('name of protein ' + str(i+1) + ':'),input('sequence of protein ' + str(i+1) + ':')))
+        sequences.append(protein(input('name of protein ' + str(i+1) + ':'),input('sequence of protein ' + str(i+1) + ':'))) #adds proteins to sequences list
+    return
+
+def generatechargeplot():
+    for i in range(0,int(len(sequences))):
         sequences[i].chargeplot()
+    return
+
+def generatemassplot():
+    for i in range(0,int(len(sequences))):
+        sequences[i].massplot()
+    return
+
 
 #interface
-plt.figure(1)
+inputnumber() # user input of protein sequences
 
-print(x)
+fig = plt.figure(1) # makes figure 1 (size and chargeplot)
 
-inputnumber()
+fig.add_subplot(211) # makes subplot 1 (chargeplot)
+plt.grid() # adds gridlines
 
-#plt.plot(x,test2.chargeplot(),'b-', label=input('second inputted protein:'))
-plt.xlabel('pH')
-plt.ylabel('relative charge')
-plt.legend() #get legend to show on plot
+generatechargeplot() # generate charge plot (duh!)
+
+plt.xlabel('pH') 
+plt.ylabel('Relative Charge')
+plt.legend() 
 
     #configure axes
 ax = plt.gca() #get current axes (then spines to configure axes)
@@ -98,20 +116,48 @@ ax.set_xticks(np.arange(round(start),round(end),0.25),True) #sets minor ticks on
     #y axis ticks 
 start,end = ax.get_ylim() #gets min and max of y axis
 end = end + 1
-#ax.set_yticks(np.arange(round(start),round(end),5)) #sets major ticks on y axis
 ax.set_yticks(np.arange(round(start),round(end),1),True) #sets minor ticks on y axis
 
-plt.grid()
+
+fig.add_subplot(212) # makes subplot 2 (sizeplot)
+
+
+generatemassplot()
+
+plt.xlabel('Protein')
+plt.ylabel('Mass (kDa)')
+plt.legend()
+
+    #configure axes
+bx = plt.gca() #get current axes (then spines to configure axes)
+bx.spines['top'].set_color('none') #removes top black line on plot
+bx.spines['bottom'].set_position('zero') #ensures x axis always crosses at y = 0
+bx.spines['right'].set_color('none') #removes right black line on plot
+bx.set_axisbelow(True)
+
+#y axis ticks 
+start,end = bx.get_ylim() #gets min and max of y axis
+start = 0
+end = end + 1
+bx.set_yticks(np.arange(0,round(end),5)) #sets major ticks on x axis
+bx.set_yticks(np.arange(round(start),round(end),1),True) #sets minor ticks on y axis
+bx.yaxis.grid(which='major')
+
 
 plt.show()
 
 
 
+#Some sequences to test:
 
+    #EGF
 #NSDSECPLSHDGYCLHDGVCMYIEALDKYACNCVVGYIGERCQYRDLKWWELR
 
+    #Insulin
 #MALWMRLLPLLALLALWGPDPAAAFVNQHLCGSHLVEALYLVCGERGFFYTPKTRREAEDLQGSLQPLALEGSLQKRGIVEQCCTSICSLYQLENYCN
 
+    #FGF2
 #MAAGSITTLPALPEDGGSGAFPPGHFKDPKRLYCKNGGFFLRIHPDGRVDGVREKSDPHIKLQLQAEERGVVSIKGVCANRYLAMKEDGRLLASKCVTDECFFFERLESNNYNTYRSRKYTSWYVALKRTGQYKLGSKTGPGQKAILFLPMSAKS
 
+    #TGFB1
 #MPPSGLRLLLLLLPLLWLLVLTPGRPAAGLSTCKTIDMELVKRKRIEAIRGQILSKLRLASPPSQGEVPPGPLPEAVLALYNSTRDRVAGESAEPEPEPEADYYAKEVTRVLMVETHN
