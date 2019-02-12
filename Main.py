@@ -61,11 +61,12 @@ class protein:
         self.charge = temp #assign new attribute for charge at different pH
         return plt.plot(x,self.charge, label=self.name) #returns plot of charge
     
-        #calculates masses of proteins in kDa 
+        #calculates the approximate masses of proteins in kDa (at physiological pH)
     def massplot(self):
         temp = 0
-        for i in range(int(len(self.sequence))): #add up the masses in Da
+        for i in range(int(len(self.sequence))): #add up the masses of the residues in Da
             temp = temp + ref.mass[self.sequence[i]]
+        temp = temp + 16 #include the extra oxygen present in the last carboxy group
         self.mass = int(temp)/1000 #conversion to kDA
         return plt.bar(self.name,self.mass,label=str(self.mass) + ' kDA') #returns plot of kDA
 
