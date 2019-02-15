@@ -7,22 +7,18 @@ import matplotlib.pyplot as plt
     #reference values for calculations and conversions
 import reference as ref
 from reference import conversion
-from reference import mass
-from reference import pka
-from reference import pkb
-from reference import pkr
+from reference import MASS
+from reference import PKA
+from reference import PKB
+from reference import PKR
 
     #properties of chemical species
 import properties as prop
-from properties import positive
-from properties import negative
+from properties import POSITIVE
+from properties import NEGATIVE
 
-#variables
-    #x-axis values for pH plot, (decrease last number for higher resolution)
-x = np.arange(0,14.25,0.25)
-
-    #n refers to figure number
-n = 1
+    #database access
+import database as data
 
 #classes (where the magic happens)
 
@@ -46,17 +42,17 @@ class protein:
     def chargeplot(self):
         temp = 0 #introduce temporary variable to add up equation for charges
         for i in range(int(len(self.sequence))): #calculate the charge on the radicals
-            if self.sequence[i] in prop.positive:
-                temp = temp + 1/(1+10**(x-ref.pkr[self.sequence[i]])) #equation for charge if AA is positive
+            if self.sequence[i] in prop.POSITIVE:
+                temp = temp + 1/(1+10**(x-ref.PKR[self.sequence[i]])) #equation for charge if AA is positive
                 pass
-            elif self.sequence[i] in prop.negative:
-                temp = temp - (1*10**(x-ref.pkr[self.sequence[i]]))/(1+10**(x-ref.pkr[self.sequence[i]])) #equation for charge if AA is negative
+            elif self.sequence[i] in prop.NEGATIVE:
+                temp = temp - (1*10**(x-ref.PKR[self.sequence[i]]))/(1+10**(x-ref.PKR[self.sequence[i]])) #equation for charge if AA is negative
                 pass
             else:
                 pass
 
-        temp = temp + 1/(1+10**(x-ref.pkb[self.sequence[0]])) #taking into account the dissociation of the -NH3 group
-        temp = temp - (1*10**(x-ref.pka[self.sequence[-1]]))/(1+10**(x-ref.pka[self.sequence[-1]])) #taking into account the dissociation of the -COOH group
+        temp = temp + 1/(1+10**(x-ref.PKB[self.sequence[0]])) #taking into account the dissociation of the -NH3 group
+        temp = temp - (1*10**(x-ref.PKA[self.sequence[-1]]))/(1+10**(x-ref.PKA[self.sequence[-1]])) #taking into account the dissociation of the -COOH group
         
         self.charge = temp #assign new attribute for charge at different pH
         return plt.plot(x,self.charge, label=self.name) #returns plot of charge
@@ -65,7 +61,7 @@ class protein:
     def massplot(self):
         temp = 0
         for i in range(int(len(self.sequence))): #add up the masses of the residues in Da
-            temp = temp + ref.mass[self.sequence[i]]
+            temp = temp + ref.MASS[self.sequence[i]]
         temp = temp + 16 #include the extra oxygen present in the last carboxy group
         self.mass = int(temp)/1000 #conversion to kDA
         return plt.bar(self.name,self.mass,label=str(self.mass) + ' kDA') #returns plot of kDA
@@ -74,15 +70,16 @@ class protein:
     #determines how many sequences need to be analyzed
 def inputnumber(): 
     global sequences
+    sequences = list()
     number = int(input('How many sequences would you like to input?\n>>>'))
-    sequences = list() #empty list to be filled instances of protein class (sequences to be analyzed)
     for i in range(0,number):
-        sequences.append(protein(input('name of protein ' + str(i+1) + ':'),input('sequence of protein ' + str(i+1) + ':'))) #adds proteins to sequences list
+        #sequences.append(protein(input('name of protein ' + str(i+1) + ':'),input('sequence of protein ' + str(i+1) + ':'))) #adds proteins to sequences list
+        sequences.append(data.access_sequence(input('Protein ' + str(i+1)+ ': '))) #list of sequences accessed at SwissProt
     return
 
 def generatechargeplot():
-    global n
-    chargeplot = plt.figure(n) 
+    chargeplot = plt.figure()
+    x = np.arange(0,14.25,0.25) 
     for i in range(0,int(len(sequences))): #generates the y values
         sequences[i].chargeplot() 
 
@@ -109,12 +106,10 @@ def generatechargeplot():
     end = end + 1
     ax.set_yticks(np.arange(round(start),round(end),1),True) #sets minor ticks on y axis
     
-    n = n + 1 #keeps figure numbers in check
     return chargeplot 
 
 def generatemassplot():
-    global n
-    massplot = plt.figure(n)
+    massplot = plt.figure()
     for i in range(0,int(len(sequences))): #generates the y values
         sequences[i].massplot()
 
@@ -137,7 +132,6 @@ def generatemassplot():
     bx.set_yticks(np.arange(round(start),round(end),1),True) #sets minor ticks on y axis
     bx.yaxis.grid(which='major')
 
-    n = n + 1 #keeps figure numbers in check
     return massplot
 
 def filecreate(name):
@@ -155,17 +149,16 @@ def filecreate(name):
 #interface
 inputnumber() # user input of protein sequences
 
-filecreate('current')
+print(sequences)
 
-file = open('current','r')
-print(file.read(1))
+#filecreate('current')
 
-generatechargeplot()
-generatemassplot()
-
+#generatechargeplot()
+#generatemassplot()
 
 
-plt.show()
+
+#plt.show()
 
 
 

@@ -1,14 +1,22 @@
 from Bio import ExPASy
 from Bio import SwissProt
 
-accessions = ["O23729", "O23730", "O23731"]
-records = []
+#accesses Swissprot database and returns polypeptide sequence
+def access_sequence(accession):
+    handle = ExPASy.get_sprot_raw(accession)
+    try:
+        record = SwissProt.read(handle)
+    except ValueException:
+        print("WARNING: Accession %s not found" % accession)
+    return record.sequence
 
-for accession in accessions:
-     handle = ExPASy.get_sprot_raw(accession)
-     try:
-         record = SwissProt.read(handle)
-     except ValueException:
-         print("WARNING: Accession %s not found" % accession)
-     records.append(record)
+#accesses Swissprot database and returns polypeptide entry_name
+def access_name(accession):
+    handle = ExPASy.get_sprot_raw(accession)
+    try:
+        record = SwissProt.read(handle)
+    except ValueException:
+        print("WARNING: Accession %s not found" % accession)
+    return record.entry_name
+    
 
