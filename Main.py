@@ -110,7 +110,7 @@ def generatechargeplot():
     ax.set_yticks(np.arange(round(start),round(end),1),True) #sets minor ticks on y axis
     
     n = n + 1 #keeps figure numbers in check
-    return
+    return chargeplot 
 
 def generatemassplot():
     global n
@@ -138,6 +138,20 @@ def generatemassplot():
     bx.yaxis.grid(which='major')
 
     n = n + 1 #keeps figure numbers in check
+    return massplot
+
+def filecreate(name):
+    file = open(name,'w')
+
+    for i in range(len(sequences)):
+        file.write(sequences[i].name + ':\n' +sequences[i].sequence + '\n\n')
+      
+    
+    file.close()
+
+    return
+
+def returnstring(text):
     return
 
 
@@ -146,6 +160,8 @@ inputnumber() # user input of protein sequences
 
 generatechargeplot()
 generatemassplot()
+
+filecreate(str(input('Name of set:')))
 
 plt.show()
 
