@@ -145,25 +145,29 @@ def filecreate(name):
 
     for i in range(len(sequences)):
         file.write(sequences[i].name + ':\n' +sequences[i].sequence + '\n\n')
-      
     
     file.close()
 
     return
 
-def returnstring(text):
-    return
 
 
 #interface
 inputnumber() # user input of protein sequences
 
+filecreate('current')
+
+file = open('current','r')
+print(file.read(1))
+
 generatechargeplot()
 generatemassplot()
 
-filecreate(str(input('Name of set:')))
+
 
 plt.show()
+
+
 
 
 
