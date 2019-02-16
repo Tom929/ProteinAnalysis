@@ -1,6 +1,8 @@
 #external modules
 import numpy as np
 import matplotlib.pyplot as plt
+from Bio import ExPASy
+from Bio import SwissProt
 
 
 #personal modules
@@ -72,7 +74,7 @@ class protein:
 
 #functions (mainly for interfacing)
     #determines how many sequences need to be analyzed
-def inputnumber(): 
+def inputnumber(input): 
     global sequences
     sequences = list()
     number = int(input('How many sequences would you like to input?\n>>>'))
@@ -97,9 +99,22 @@ def filecreate(name):
 
 
 #interface
-inputnumber() # user input of protein sequences
+#inputnumber() # user input of protein sequences
 
 #print(len(sequences))
+sequences = list()
+file = open('ProteinInput.txt','r')
+
+input = file.read().splitlines()
+
+for i in input:
+    sequences.append(protein(data.access_name(i), data.access_sequence(i))) #list of sequences accessed at SwissProt
+    print(data.access_name(i))
+    print(data.access_sequence(i))
+
+file.close()
+
+
 
 #filecreate('current') ## in progress to write text file with current inputted sequences
 
@@ -107,3 +122,9 @@ graph.generatechargeplot(sequences)
 graph.generatemassplot(sequences)
 
 plt.show()
+
+
+
+
+
+
