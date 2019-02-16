@@ -4,7 +4,7 @@
 #properties of amino acids
 
     #amino acids whose radicals become positive
-positive = ['H','K','R']
+POSITIVE = ['H','K','R']
 
     #amino acids whose radicals become negative
-negative = ['Y','D','E','C']
+NEGATIVE = ['Y','D','E','C']
