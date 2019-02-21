@@ -3,7 +3,7 @@ Python 3.7
 
 Program by: Tom Resink (Biochemistry student, Imperial College London)
 
-Simple program that can be utilized to predict the propertiesof a protein from its primary sequence.
+Simple program that can be utilized to predict the properties of a protein from its primary sequence.
 It is currently being used to aid in the decision of running size exclusion chromatography or ion exchange chromatography on the secretome of *Pichia pastoris*
 
 How to use:
