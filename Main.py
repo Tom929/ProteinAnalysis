@@ -92,7 +92,6 @@ def inputnumber(input):
 def swissprot_sequences():
     global sequences
     name = input('Name of the text file with UniProt access IDs:\n>>>')
-    sequences = list()
     file = open(name,'r')
 
     text = file.read().splitlines()
@@ -140,6 +139,11 @@ sequences.sort(key = lambda sequences: sequences.mass)
 
 for i in range(len(sequences)):
     print(sequences[i].name + ': '+ str(sequences[i].mass))
+
+#swissprot_sequences()
+
+graph.generatemassplot(sequences)
+graph.generatechargeplot(sequences)
 
 plt.show()
 
