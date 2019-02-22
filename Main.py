@@ -1,9 +1,10 @@
 #external modules
 import numpy as np
 import matplotlib.pyplot as plt
+
 from Bio import ExPASy
 from Bio import SwissProt
-
+from Bio import SeqIO
 
 #personal modules
     #reference values for calculations and conversions
@@ -61,16 +62,19 @@ class protein:
         temp = temp - (1*10**(x-ref.PKA[self.sequence[-1]]))/(1+10**(x-ref.PKA[self.sequence[-1]])) #taking into account the dissociation of the -COOH group
         
         self.charge = temp #assign new attribute for charge at different pH
-        return plt.plot(x,self.charge, label=self.name) #returns plot of charge
+        return plt.plot(x,self.charge) #, label=self.name) #returns plot of charge
     
         #calculates the approximate masses of proteins in kDa (at physiological pH)
     def massplot(self):
         temp = 0
         for i in range(int(len(self.sequence))): #add up the masses of the residues in Da
-            temp = temp + ref.MASS[self.sequence[i]]
+            try:
+                temp = temp + ref.MASS[self.sequence[i]]
+            except:
+                pass
         temp = temp + 16 #include the extra oxygen present in the last carboxy group
         self.mass = int(temp)/1000 #conversion to kDA (conversion to int gives 3 d.p.)
-        return plt.bar(self.name,self.mass,label=str(self.mass) + ' kDA') #returns plot of kDA
+        return plt.bar(self.name,self.mass) #,label=str(self.mass) + ' kDA') #returns plot of kDA
 
 #functions (mainly for interfacing)
     #determines how many sequences need to be analyzed
@@ -84,8 +88,22 @@ def inputnumber(input):
         print(data.access_sequence(temp))
     return
 
+    #accesses swissprot through a list of sequence ids stored in a text file
+def swissprot_sequences():
+    global sequences
+    name = input('Name of the text file with UniProt access IDs:\n>>>')
+    sequences = list()
+    file = open(name,'r')
 
+    text = file.read().splitlines()
 
+    for i in text:
+        sequences.append(protein(data.access_name(i), data.access_sequence(i))) #list of sequences accessed at SwissProt
+
+    file.close()
+    return sequences
+
+    #work in progress
 def filecreate(name):
     file = open(name,'w')
 
@@ -95,31 +113,33 @@ def filecreate(name):
     file.close()
 
     return
-
-
+    
+#reads a fasta file and prints its id and discription, while returning a list of its id and sequence
+def fastaread():
+    global sequences
+    temp = list(SeqIO.parse('pastorissecretome.fas','fasta'))
+    sequences = list()
+    
+    for record in temp:
+        print('%a' % (record.description))
+        sequences.append(protein(record.id[17:29],record.seq))
+    
+    return  sequences
 
 #interface
-#inputnumber() # user input of protein sequences
 
-#print(len(sequences))
-sequences = list()
-file = open('ProteinInput.txt','r')
+fastaread()
+print(len(sequences))
+#graph.generatechargeplot(sequences)
+#graph.generatemassplot(sequences)
 
-input = file.read().splitlines()
+for i in range(len(sequences)):
+    sequences[i].massplot()
 
-for i in input:
-    sequences.append(protein(data.access_name(i), data.access_sequence(i))) #list of sequences accessed at SwissProt
-    print(data.access_name(i))
-    print(data.access_sequence(i))
+sequences.sort(key = lambda sequences: sequences.mass)
 
-file.close()
-
-
-
-#filecreate('current') ## in progress to write text file with current inputted sequences
-
-graph.generatechargeplot(sequences)
-graph.generatemassplot(sequences)
+for i in range(len(sequences)):
+    print(sequences[i].name + ': '+ str(sequences[i].mass))
 
 plt.show()
 

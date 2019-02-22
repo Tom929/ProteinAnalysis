@@ -7,12 +7,12 @@ def generatechargeplot(sequences):
     chargeplot = plt.figure()
     for i in range(0,int(len(sequences))): #generates the y values
         sequences[i].chargeplot() 
-
+    
     plt.grid() # adds gridlines
 
     plt.xlabel('pH') 
     plt.ylabel('Relative Charge')
-    plt.legend() 
+    #plt.legend() #only include if labels included in Main.py
 
     #configure axes
     ax = plt.gca() #get current axes (then spines to configure axes)
@@ -29,7 +29,7 @@ def generatechargeplot(sequences):
     #y axis ticks 
     start,end = ax.get_ylim() #gets min and max of y axis
     end = end 
-    ax.set_yticks(np.arange(round(start),round(end),1),True) #sets minor ticks on y axis
+    ax.set_yticks(np.arange(round(start),round(end),10),True) #sets minor ticks on y axis
     
     return chargeplot
 
@@ -40,7 +40,7 @@ def generatemassplot(sequences):
 
     plt.xlabel('Protein')
     plt.ylabel('Mass (kDa)')
-    plt.legend()
+    #plt.legend() #only include if labels included in Main.py
 
     #configure axes
     bx = plt.gca() #get current axes (then spines to configure axes)
@@ -56,5 +56,6 @@ def generatemassplot(sequences):
     bx.set_yticks(np.arange(0,round(end),5)) #sets major ticks on x axis
     bx.set_yticks(np.arange(round(start),round(end),1),True) #sets minor ticks on y axis
     bx.yaxis.grid(which='major')
+    plt.xticks(rotation=90)
 
     return massplot

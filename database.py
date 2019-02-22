@@ -18,3 +18,4 @@ def access_name(accession):
     except ValueException:
         print("WARNING: Accession %s not found" % accession)
     return record.entry_name
+
