@@ -14,8 +14,11 @@ How to use:
 Current features:
 - Predict the charge of multiple polypeptides at different pH
 - Predict the mass in kDA of multiple polypeptides
-- Linked to SwissProt/UniProt database (*New*)
-- Can take database accession numbers as input (*New*)
+- Linked to SwissProt/UniProt databases
+- Can take database accession numbers as input
+
+Current problems:
+- bar chart of predicted masses stacks when the protein has the same name as others
 
 Sources:
 "Properties of Amino Acids," in CRC Handbook of Chemistry and Physics, 99th Edition (Internet Version 2018), John R. Rumble, ed., CRC Press/Taylor & Francis, Boca Raton, FL.
